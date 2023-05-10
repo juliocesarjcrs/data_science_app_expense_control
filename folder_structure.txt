@@ -1,0 +1,23 @@
+├── .gitignore
+├── README.md
+├── api/
+│   ├── app/
+│   │   ├── models.py
+│   │   ├── utils.py
+│   │   └── views.py
+│   ├── main.py
+│   └── requirements.txt
+├── folder_structure.txt
+├── in/
+│   └── preprocess/
+│       └── df_time_monthly
+├── main.py
+├── models/
+│   └── best_model_47_5%.pkl
+├── notebooks/
+│   ├── 1_EDA.ipynb
+│   └── 2_Models.ipynb
+├── out/
+├── requirements.txt
+├── time_series.py
+└── utils.py

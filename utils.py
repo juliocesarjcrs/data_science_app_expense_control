@@ -6,6 +6,7 @@ from pmdarima.metrics import smape
 import locale
 locale.setlocale(locale.LC_MONETARY, 'es_CO.UTF-8')
 import joblib
+import os
 class Utils:
     def load_from_csv(self, path):
         """
@@ -105,3 +106,35 @@ class Utils:
                 ('Error MAPE', f'{MAPE_percent}%'),
                 ('SMAPE', round(SMAPE, 2))]
         return results
+
+    def generate_folder_structure(self,folder_path: str, exclude_dirs: list = []) -> str:
+        """
+        Generate a text representation of the folder structure starting from the given folder path,
+        excluding the directories specified in the exclude_dirs list.
+        """
+        def _generate_folder_structure_aux(folder_path, padding):
+            folder_structure = ""
+            folder_contents = sorted(os.listdir(folder_path))
+            for i, item in enumerate(folder_contents):
+                if item in exclude_dirs:
+                    continue
+                full_path = os.path.join(folder_path, item)
+                if os.path.isdir(full_path):
+                    if i == len(folder_contents) - 1:
+                        folder_structure += f"{padding}└── {item}/\n"
+                        folder_structure += _generate_folder_structure_aux(full_path, padding + "    ")
+                    else:
+                        folder_structure += f"{padding}├── {item}/\n"
+                        folder_structure += _generate_folder_structure_aux(full_path, padding + "│   ")
+                else:
+                    if i == len(folder_contents) - 1:
+                        folder_structure += f"{padding}└── {item}\n"
+                    else:
+                        folder_structure += f"{padding}├── {item}\n"
+            return folder_structure
+
+        folder_structure = _generate_folder_structure_aux(folder_path, "")
+        file_path = os.path.join(folder_path, "folder_structure.txt")
+        with open(file_path, "w") as f:
+            f.write(folder_structure)
+        return folder_structure

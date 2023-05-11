@@ -3,10 +3,10 @@ from utils import Utils
 from time_series import TimeSeries
 if __name__ == "__main__":
     utils = Utils()
-    # # case 0 generate folder strucutre
-    # folder_path = "./"
-    # exclude_dirs = [".git", "myenv-py3.11", "__pycache__"]
-    # folder_structure = utils.generate_folder_structure(folder_path, exclude_dirs)
+    # case 0 generate folder strucutre
+    folder_path = "./"
+    exclude_dirs = [".git", "myenv-py3.11", "__pycache__"]
+    folder_structure = utils.generate_folder_structure(folder_path, exclude_dirs)
 
     # case 2 API training model and save new model
     # data = utils.load_from_csv('./in/preprocess/df_time_monthly')
@@ -24,19 +24,19 @@ if __name__ == "__main__":
     #     print(f'{result[0]}: {result[1]}')
     # utils.model_export(my_model, results[3][1])
 
-    # case 2 API load model and predict
+    # # case 2 API load model and predict
 
-    best_model = utils.load_model('./models/best_model_47_5%.pkl')
+    # best_model = utils.load_model('./models/best_model_47_5%.pkl')
 
-    # Generación de fechas para los próximos 5 periodos
-    future_dates = pd.date_range(start= '2023-05-01', periods=5, freq='M') # M month end frequency
-    exogen_data = []
-    for date in future_dates:
-        exogen_data.append(date.days_in_month)
-    print(exogen_data)
-    print(future_dates)
+    # # Generación de fechas para los próximos 5 periodos
+    # future_dates = pd.date_range(start= '2023-05-01', periods=5, freq='M') # M month end frequency
+    # exogen_data = []
+    # for date in future_dates:
+    #     exogen_data.append(date.days_in_month)
+    # print(exogen_data)
+    # print(future_dates)
 
-    # Predicción de valores futuros
-    my_exog_data = [31, 30, 31, 31, 30]
-    future_predictions = best_model.forecast(steps=5, exog=my_exog_data)
-    print(future_predictions)
+    # # Predicción de valores futuros
+    # my_exog_data = [31, 30, 31, 31, 30]
+    # future_predictions = best_model.forecast(steps=5, exog=my_exog_data)
+    # print(future_predictions)

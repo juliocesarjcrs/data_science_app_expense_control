@@ -1,0 +1,20 @@
+version: '3.9'
+
+services:
+  devtimeseries:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./api:/code/api #Aquí, ./api se refiere al directorio en tu máquina local que contiene el código de tu aplicación, mientras que /code/api es la ruta del directorio en el contenedor donde se montará el volumen.
+    #   - .:/code/src
+  # prodtimeseries:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.prod
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - .:/api

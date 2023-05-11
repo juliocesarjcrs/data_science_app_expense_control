@@ -1,7 +1,6 @@
 from .models import   PredictionRequest
 from .utils import get_model
 import pandas as pd
-best_model = get_model()
 
 def get_prediction(request: PredictionRequest) -> dict:
     """
@@ -15,6 +14,10 @@ def get_prediction(request: PredictionRequest) -> dict:
     Returns:
     - A dictionary containing the predicted values for each time step specified in the request.
     """
+    try:
+        best_model = get_model()
+    except Exception as e:
+        return {"error": str(e)}
     # Set some variables needed for predictions
     len_test = 9
     periodo_ajust = len_test + request.steps

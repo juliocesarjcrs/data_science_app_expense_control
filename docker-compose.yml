@@ -10,6 +10,8 @@ services:
     volumes:
       - ./api:/code/api #Aquí, ./api se refiere al directorio en tu máquina local que contiene el código de tu aplicación, mientras que /code/api es la ruta del directorio en el contenedor donde se montará el volumen.
       - ./src:/code/src  # Agregar esta línea para mapear el directorio actual en el contenedor
+    environment:
+      PYTHONPATH: /code
 
   # prodtimeseries:
   #   build:

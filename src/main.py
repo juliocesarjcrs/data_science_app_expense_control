@@ -1,6 +1,7 @@
 import pandas as pd
 from utils import Utils
 from time_series import TimeSeries
+import os.path
 if __name__ == "__main__":
     utils = Utils()
     # case 0 generate folder strucutre
@@ -9,7 +10,10 @@ if __name__ == "__main__":
     folder_structure = utils.generate_folder_structure(folder_path, exclude_dirs)
 
     # case 2 API training model and save new model
-    # data = utils.load_from_csv('./in/preprocess/df_time_monthly')
+    # filepath = "./src/in/preprocess/df_time_monthly"
+    # if not os.path.isfile(filepath):
+    #     raise Exception(f"No se encontró el archivo {filepath}.")
+    # data = utils.load_from_csv(filepath)
     # print(data.head())
 
     # timeSeries = TimeSeries()

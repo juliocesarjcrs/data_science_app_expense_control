@@ -20,7 +20,7 @@ def make_model_prediction(request: PredictionRequest):
      print('current_date=', current_date)
      if current_date.month != previous_month.month + 1 or current_date.year != previous_month.year:
          raise HTTPException(status_code=400, detail="Invalid date")
-     if request.steps < 1 and request.steps > 12:
+     if request.steps < 1 or request.steps > 12:
          raise HTTPException(status_code=400, detail='Step must be greater than 0 and less than 12')
      return PredictionResponse(predcit=get_prediction(request))
 

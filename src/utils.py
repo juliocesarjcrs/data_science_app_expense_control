@@ -32,7 +32,7 @@ class Utils:
     def model_export(self,  cls, score):
         score_str = str(score).replace(".", "_")
         file_name = f'best_model_{score_str}.pkl'
-        joblib.dump(cls, f'./models/{file_name}')
+        joblib.dump(cls, f'./src/models/{file_name}')
 
     def load_model(self, path):
         return joblib.load(path)

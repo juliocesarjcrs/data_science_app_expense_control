@@ -104,6 +104,19 @@ http://localhost:8000/
 For instance, would publish port 80 from the container to port 8080 on the host or external network.
 
 docker run -p 8080:80
+* Para instalar correr el código base con docker.
+Ej: src/main.py
+o para instalar nuevas liibrerias como "pip install httpx"
+Se puede usar:
+```
+docker compose run devtimeseries python src/main.py
+docker compose run devtimeseries pip install httpx
+docker compose run devtimeseries pip install --upgrade pip
+# ejecutar test
+docker compose exec devtimeseries pytest
+
+
+```
 ## Autor
 Julio Cesar Rico.
 

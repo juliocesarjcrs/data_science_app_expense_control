@@ -10,8 +10,22 @@ services:
     volumes:
       - ./api:/code/api #Aquí, ./api se refiere al directorio en tu máquina local que contiene el código de tu aplicación, mientras que /code/api es la ruta del directorio en el contenedor donde se montará el volumen.
       - ./src:/code/src  # Agregar esta línea para mapear el directorio actual en el contenedor
+      - ./data:/code/data
+      - ./models:/code/models
+      - ./folder_structure.txt:/code/folder_structure.txt # agregar esta línea para mapear el archivo en el contenedor
+
     environment:
       PYTHONPATH: /code
+
+  jupyter:
+    build:
+      context: .
+      dockerfile: DockerFile.jupyter
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./src:/code/src
+      - ./data:/code/data
 
   # prodtimeseries:
   #   build:

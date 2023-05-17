@@ -13,7 +13,7 @@ pip -V
 Para instalarlas las librerias, ejecuta el comando `pip install -r
 requirements.txt`
 
-El dataset se alojará en la ruta in/preprocess con el nombre **df_time_monthly**
+El dataset se alojará en la ruta data/processed con el nombre **df_time_monthly.csv**
 
 Tabla
 ------------------------------------------------------------
@@ -33,19 +33,34 @@ date         |  cost       | days_in_month
 │   │   ├── utils.py
 │   │   └── views.py
 │   ├── main.py
-│   └── requirements.txt
-├── docker-compose.yml
+│   ├── requirements.txt
+│   └── test/
+│       └── test_main.py
+├── data/
+│   ├── processed/
+│   │   ├── df_time_monthly.csv
+│   │   └── summaryCosts.csv
+│   └── raw/
+│       ├── GASTOS-2019 - Flujo de Caja MES.csv
+│       └── expenses.csv
 ├── folder_structure.txt
+├── models/
+│   └── best_model_38_7%.pkl
 ├── requirements.txt
+├── requirements_test.txt
 └── src/
-    ├── in/
-    │   └── preprocess/
     ├── main.py
-    ├── models/
+    ├── my_functions.py
     ├── notebooks/
-    │   ├── 1_EDA.ipynb
-    │   └── 2_Models.ipynb
-    ├── out/
+    │   ├── .ipynb_checkpoints/
+    │   │   ├── 1-Load data-checkpoint.ipynb
+    │   │   ├── 2-Create dataset-checkpoint.ipynb
+    │   │   ├── 4_EDA-checkpoint.ipynb
+    │   │   └── 5_Models-checkpoint.ipynb
+    │   ├── 1-Load data.ipynb
+    │   ├── 2-Create dataset.ipynb
+    │   ├── 4_EDA.ipynb
+    │   └── 5_Models.ipynb
     ├── time_series.py
     └── utils.py
 ```
@@ -65,12 +80,13 @@ date         |  cost       | days_in_month
 * * **requirements.txt:** Archivo con las dependencias necesarias para la ejecución de la API FastAPI.
 * **docker-compose.yml:** Archivo Docker compose para correr las diferentes imagenes.
 * **requirements.txt:** Archivo con las dependencias necesarias para la ejecución del proyecto.
+* **data/:** Carpeta que contiene los archivos de entrada del proyecto.
+* * **processed/:** Carpeta que contiene el archivo "df_time_monthly.csv" procesado.
+* * **raw/:** Carpeta que contiene el archivo "expenses.csv" data original proveniente d eun api rest y archivo "GASTOS-2019 - Flujo de Caja MES.csv" con data previa histórica que no estaba almacenada en una database
 * **src/:** Carpeta que contiene el código fuente.
 * * **notebooks/:** Carpeta que contiene los Notebook
 * * * **1_EDA.ipynb:** Notebook de Jupyter con el análisis exploratorio de datos.
 * * * **2_Models.ipynb:** Notebook de Jupyter con la construcción de modelos de Machine Learning.
-* * **in/:** Carpeta que contiene los archivos de entrada del proyecto.
-* * * **preprocess/:** Carpeta que contiene el archivo "df_time_monthly" preprocesado.
 * * **main.py:** Archivo principal del proyecto que ejecuta todo el flujo.
 * * **models/:** Carpeta que contiene el archivo "best_model_47_5%.pkl" con el modelo de Machine Learning entrenado.
 * * **out/:** Carpeta donde se guardan los archivos de salida generados por el proyecto.
@@ -115,8 +131,9 @@ docker compose run devtimeseries pip install --upgrade pip
 # ejecutar test
 docker compose exec devtimeseries pytest
 
-
 ```
+Correr jupyter notebooks
+``` docker compose up jupyter ```
 ## Autor
 Julio Cesar Rico.
 

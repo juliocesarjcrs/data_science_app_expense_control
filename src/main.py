@@ -9,8 +9,8 @@ if __name__ == "__main__":
     exclude_dirs = [".git", "myenv-py3.11", "__pycache__"]
     folder_structure = utils.generate_folder_structure(folder_path, exclude_dirs)
 
-    # case 2 API training model and save new model
-    # filepath = "./src/in/preprocess/df_time_monthly"
+    # # case 2 API training model and save new model
+    # filepath = "./data/processed/df_time_monthly.csv"
     # if not os.path.isfile(filepath):
     #     raise Exception(f"No se encontró el archivo {filepath}.")
     # data = utils.load_from_csv(filepath)
@@ -28,9 +28,12 @@ if __name__ == "__main__":
     #     print(f'{result[0]}: {result[1]}')
     # utils.model_export(my_model, results[3][1])
 
-    # # case 2 API load model and predict
-
-    # best_model = utils.load_model('./models/best_model_47_5%.pkl')
+    # # case 3 API load model and predict
+    # model_path = './models/best_model_38_7%.pkl'
+    # if not os.path.isfile(model_path):
+    #     raise Exception(f"No se encontró el archivo {model_path}.")
+    # # best_model = utils.load_model('./models/best_model_47_5%.pkl')
+    # best_model = utils.load_model(model_path)
 
     # # Generación de fechas para los próximos 5 periodos
     # future_dates = pd.date_range(start= '2023-05-01', periods=5, freq='M') # M month end frequency

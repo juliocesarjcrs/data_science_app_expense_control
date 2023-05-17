@@ -1,24 +1,36 @@
-├── .gitignore
-├── Dockerfile.dev
-├── README.md
 ├── api/
 │   ├── app/
 │   │   ├── models.py
 │   │   ├── utils.py
 │   │   └── views.py
 │   ├── main.py
-│   └── requirements.txt
-├── docker-compose.yml
+│   ├── requirements.txt
+│   └── test/
+│       └── test_main.py
+├── data/
+│   ├── processed/
+│   │   ├── df_time_monthly.csv
+│   │   └── summaryCosts.csv
+│   └── raw/
+│       ├── GASTOS-2019 - Flujo de Caja MES.csv
+│       └── expenses.csv
 ├── folder_structure.txt
+├── models/
+│   └── best_model_38_7%.pkl
 ├── requirements.txt
+├── requirements_test.txt
 └── src/
-    ├── in/
-    │   └── preprocess/
     ├── main.py
-    ├── models/
+    ├── my_functions.py
     ├── notebooks/
-    │   ├── 1_EDA.ipynb
-    │   └── 2_Models.ipynb
-    ├── out/
+    │   ├── .ipynb_checkpoints/
+    │   │   ├── 1-Load data-checkpoint.ipynb
+    │   │   ├── 2-Create dataset-checkpoint.ipynb
+    │   │   ├── 4_EDA-checkpoint.ipynb
+    │   │   └── 5_Models-checkpoint.ipynb
+    │   ├── 1-Load data.ipynb
+    │   ├── 2-Create dataset.ipynb
+    │   ├── 4_EDA.ipynb
+    │   └── 5_Models.ipynb
     ├── time_series.py
     └── utils.py

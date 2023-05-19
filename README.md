@@ -134,6 +134,9 @@ docker compose exec devtimeseries pytest
 ```
 Correr jupyter notebooks
 ``` docker compose up jupyter ```
+
+Para instalar nuevas librerias. Primero se debe definir por ejemplo en en el requirements_jupyter.txt
+y reconstruir con ``` docker compose up --build jupyter```
 ## Autor
 Julio Cesar Rico.
 

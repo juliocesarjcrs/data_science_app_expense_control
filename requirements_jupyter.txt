@@ -1,3 +1,4 @@
 seaborn==0.12.2
 holidays==0.24
+tabulate==0.9.0
 -r requirements.txt

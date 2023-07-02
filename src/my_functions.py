@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import holidays
 import datetime
 # metrics error
@@ -14,6 +15,9 @@ co_holidays = holidays.CO()
 import matplotlib.pyplot as plt
 import plotly.express as px
 import os
+import itertools
+import statsmodels.api as sm
+import plotly.graph_objects as go
 
 def num_holidays(start, end):
 
@@ -228,6 +232,77 @@ def train_test_time_series(ts):
     # ax.legend(bbox_to_anchor=[1,1]);
     return train, test
 
+def split_train_test_data(data, target_variable, test_size=0.2):
+    """
+    Divide los datos en conjuntos de entrenamiento y prueba.
+
+    Args:
+        data (pd.DataFrame): El DataFrame que contiene los datos.
+        target_variable (str): El nombre de la variable objetivo.
+        test_size (float, optional): El tamaño deseado del conjunto de prueba. Por defecto es 0.2.
+
+    Returns:
+        tuple: Una tupla que contiene los conjuntos de entrenamiento y prueba para las variables exógenas
+        y la variable objetivo.
+    """
+    X = data.drop(target_variable, axis=1)
+    y = data[target_variable]
+    train_size = int(len(data) * (1 - test_size))
+    train_X, train_y = X[:train_size], y[:train_size]
+    test_X, test_y = X[train_size:], y[train_size:]
+    return train_X, train_y, test_X, test_y
+
+def select_best_exogenous_variable(metrics_dict):
+    """
+    Selecciona la mejor variable exógena en función del menor valor de MSE.
+
+    Args:
+        metrics_dict (dict): Un diccionario que contiene las métricas de cada combinación de variables exógenas.
+
+    Returns:
+        tuple: Una tupla que contiene la mejor variable exógena, una descripción de por qué se seleccionó
+        y las métricas correspondientes a esa combinación.
+    """
+    min_mse = float('inf')
+    best_variable = None
+    best_metrics = None
+
+    for variable, metrics in metrics_dict.items():
+        mse = metrics['mse']
+        if mse < min_mse:
+            min_mse = mse
+            best_variable = variable
+            best_metrics = metrics
+
+    description = f"La variable exógena {best_variable} tiene el menor MSE, lo que indica un mejor ajuste del modelo y es relevante para el problema."
+
+    return best_variable, description, best_metrics
+
+
+
+
+def build_evaluate_sarima_model(train_X, train_y, test_X, test_y, exog_var, order, seasonal_order):
+    """
+    Construye y evalúa un modelo SARIMAX con una variable exógena dada.
+
+    Args:
+        train_X (pd.DataFrame): Conjunto de entrenamiento para las variables exógenas.
+        train_y (pd.Series): Conjunto de entrenamiento para la variable objetivo.
+        test_X (pd.DataFrame): Conjunto de prueba para las variables exógenas.
+        test_y (pd.Series): Conjunto de prueba para la variable objetivo.
+        exog_var (str): La variable exógena actual.
+        order (tuple): El orden del modelo SARIMA.
+        seasonal_order (tuple): El orden estacional del modelo SARIMA.
+
+    Returns:
+        tuple: Una tupla que contiene el modelo ajustado, las predicciones y las métricas correspondientes.
+    """
+    model_sarima = sm.tsa.SARIMAX(train_y, exog=train_X[exog_var], order=order, seasonal_order=seasonal_order)
+    model_sarima_fit = model_sarima.fit(disp=False)
+    y_pred_sarima = model_sarima_fit.predict(start=len(train_y), end=len(train_y) + len(test_y) - 1, exog=test_X[exog_var])
+    metrics = evaluate_forecast(test_y, y_pred_sarima, False)
+    return model_sarima_fit, y_pred_sarima, metrics
+
 def plot_predict(train, test, forecast):
     train_plot = train
     train_plot['type'] = 'train'
@@ -381,3 +456,86 @@ def load_dataset(full_path):
     df.set_index('date', inplace=True)
     df.index.freq = 'M'
     return df
+
+def plot_time_series(train_y, test_y, y_pred):
+    """
+    Grafica los datos de entrenamiento (train), prueba (test) y las predicciones de un modelo de series de tiempo.
+
+    Args:
+        train_y (pandas.Series): Serie de tiempo de los datos de entrenamiento.
+        test_y (pandas.Series): Serie de tiempo de los datos de prueba.
+        y_pred (pandas.Series): Serie de tiempo de las predicciones.
+
+    Returns:
+        None (Muestra el gráfico utilizando Plotly)
+
+    """
+
+    # Concatenar los datos de entrenamiento, prueba y predicciones en un solo DataFrame
+    df = pd.DataFrame({'Train': train_y, 'Test': test_y, 'Predictions': y_pred})
+
+    # Crear una figura de Plotly
+    fig = go.Figure()
+
+    # Agregar la serie de tiempo de entrenamiento al gráfico
+    fig.add_trace(go.Scatter(x=train_y.index, y=train_y, name='Train'))
+
+    # Agregar la serie de tiempo de prueba al gráfico
+    fig.add_trace(go.Scatter(x=test_y.index, y=test_y, name='Test'))
+
+    # Agregar la serie de tiempo de predicciones al gráfico
+    fig.add_trace(go.Scatter(x=y_pred.index, y=y_pred, name='Predictions'))
+
+    # Personalizar el diseño del gráfico
+    fig.update_layout(title='Serie de Tiempo - Train, Test y Predicciones',
+                      xaxis_title='Fecha',
+                      yaxis_title='Valor',
+                      legend=dict(x=0, y=1),
+                      height=500)
+
+    # Mostrar el gráfico
+    fig.show()
+
+def time_series_interpolation(time_series, anomaly_index):
+    """
+    Performs interpolation on a time series by imputing missing values at the specified anomaly index.
+
+    Parameters:
+        time_series (pd.Series): The original time series.
+        anomaly_index: The index of the anomaly where the missing value occurs.
+
+    Returns:
+        pd.Series: The time series with missing values imputed using linear interpolation.
+    """
+    # Create a copy of the original time series
+    interpolated_series = time_series.copy()
+
+    # Get the anomalous value
+    anomaly_value = interpolated_series.loc[anomaly_index]
+
+    # Replace the anomalous value with NaN (missing values)
+    interpolated_series.loc[anomaly_index] = np.nan
+
+    # Perform linear interpolation to impute the missing values
+    interpolated_series.interpolate(method='linear', inplace=True)
+
+    return interpolated_series
+
+def detect_anomalies(data, column, threshold_factor=2):
+    """
+    Detects anomalies in a specified column of a DataFrame using mean and standard deviation approach.
+
+    Parameters:
+        data (pd.DataFrame): The DataFrame containing the data.
+        column (str): The column name where anomalies should be detected.
+        threshold_factor (float, optional): The factor to multiply the standard deviation to determine the threshold.
+
+    Returns:
+        pd.DataFrame: A DataFrame containing the rows with detected anomalies.
+    """
+    mean = data[column].mean()
+    std = data[column].std()
+    threshold = threshold_factor * std
+    anomalies = data[data[column].abs() - mean > threshold]
+
+    return anomalies

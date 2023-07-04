@@ -26,6 +26,7 @@ services:
     volumes:
       - ./src:/code/src
       - ./data:/code/data
+      - ./models:/code/models
 
   # prodtimeseries:
   #   build:

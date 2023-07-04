@@ -429,9 +429,9 @@ def evaluate_forecast(actual, predicted, print_table=True, use_markdown=False):
 
     # Retornar las métricas en un diccionario
     metrics = {
-        'mse': mse,
-        'mae': mae,
-        'r2': r2,
+        'MSE': mse,
+        'MAE': mae,
+        'R2': r2,
         'RMSE': RMSE,
         'MAPE': MAPE,
         'SMAPE': SMAPE,
@@ -457,7 +457,7 @@ def load_dataset(full_path):
     df.index.freq = 'M'
     return df
 
-def plot_time_series(train_y, test_y, y_pred):
+def plot_time_series(train_y, test_y, y_pred, title='Serie de Tiempo - Train, Test y Predicciones'):
     """
     Grafica los datos de entrenamiento (train), prueba (test) y las predicciones de un modelo de series de tiempo.
 
@@ -487,7 +487,7 @@ def plot_time_series(train_y, test_y, y_pred):
     fig.add_trace(go.Scatter(x=y_pred.index, y=y_pred, name='Predictions'))
 
     # Personalizar el diseño del gráfico
-    fig.update_layout(title='Serie de Tiempo - Train, Test y Predicciones',
+    fig.update_layout(title=title,
                       xaxis_title='Fecha',
                       yaxis_title='Valor',
                       legend=dict(x=0, y=1),

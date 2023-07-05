@@ -19,6 +19,10 @@ import itertools
 import statsmodels.api as sm
 import plotly.graph_objects as go
 
+#models
+from statsmodels.tsa.statespace.sarimax import SARIMAX
+import pmdarima as pm
+
 def num_holidays(start, end):
 
     range_of_dates = pd.date_range(start=start, end=end)
@@ -539,3 +543,19 @@ def detect_anomalies(data, column, threshold_factor=2):
     anomalies = data[data[column].abs() - mean > threshold]
 
     return anomalies
+
+def fit_auto_arima(train_y, train_X):
+    # Ajustar modelo Auto ARIMA
+    model = pm.auto_arima(train_y, exogenous=train_X, seasonal=True)
+    return model
+
+def fit_sarima(train_y, train_X, order, seasonal_order):
+    # Ajustar modelo SARIMA
+    model = SARIMAX(train_y, exog=train_X, order=order, seasonal_order=seasonal_order)
+    model_fit = model.fit(disp=False)
+    return model_fit
+
+def save_results_to_file(model_metrics, file_path):
+    # Guardar los resultados en un archivo CSV
+    result_df = pd.DataFrame(model_metrics)
+    result_df.to_csv(file_path, index=False)

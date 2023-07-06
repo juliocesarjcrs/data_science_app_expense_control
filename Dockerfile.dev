@@ -2,15 +2,14 @@ FROM python:3.11.3-slim-buster
 
 WORKDIR /code
 
-COPY  ./requirements.txt /code/requirements.txt
-COPY  ./requirements_test.txt /code/requirements_test.txt
+COPY ./requirements /code/requirements
 
 RUN apt-get update && \
     apt-get install -y locales && \
     sed -i -e 's/# es_CO.UTF-8 UTF-8/es_CO.UTF-8 UTF-8/' /etc/locale.gen && \
     dpkg-reconfigure --frontend=noninteractive locales
 
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+RUN pip install --no-cache-dir --upgrade -r /code/requirements/requirements.txt
 
 RUN pip install jupyter nbserverproxy
 

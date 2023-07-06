@@ -1,13 +1,34 @@
-import pandas as pd
-from utils import Utils
-from time_series import TimeSeries
-import os.path
+from dependency_inyections.container import Container
+def main():
+    print('paso 1')
+    # Crea una instancia del contenedor y resuelve las dependencias
+    container = Container()
+    model_training = container.model_training()
+    model_training.preprocess_data()
+    # Paso 1: Preparación de datos
+    # prepare_data()
+
+    # Paso 2: Entrenamiento de modelos
+    # train_models()
+
+    # Paso 3: Selección del mejor modelo
+    # best_model = select_best_model()
+
+    # Paso 4: Otras tareas o flujos de trabajo
+
 if __name__ == "__main__":
-    utils = Utils()
-    # case 0 generate folder strucutre
-    folder_path = "./"
-    exclude_dirs = [".git", "myenv-py3.11", "__pycache__"]
-    folder_structure = utils.generate_folder_structure(folder_path, exclude_dirs)
+    main()
+
+# import pandas as pd
+# from utils.utils import Utils
+# from time_series import TimeSeries
+# import os.path
+# if __name__ == "__main__":
+#     utils = Utils()
+#     # case 0 generate folder strucutre
+#     folder_path = "./"
+#     exclude_dirs = [".git", "myenv-py3.11", "__pycache__"]
+#     folder_structure = utils.generate_folder_structure(folder_path, exclude_dirs)
 
     # # case 2 API training model and save new model
     # filepath = "./data/processed/df_time_monthly.csv"
@@ -47,3 +68,7 @@ if __name__ == "__main__":
     # my_exog_data = [31, 30, 31, 31, 30]
     # future_predictions = best_model.forecast(steps=5, exog=my_exog_data)
     # print(future_predictions)
+
+
+
+
